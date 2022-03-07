@@ -1,0 +1,92 @@
+Spring core LifeCycle  
+======================
+
+public void init(){}
+public void destroy(){}
+-------------------------
+
+
+Employee.java
+--------------
+
+package com.springcore.lifecycle;
+
+public class Employee {
+	private double id;
+
+	public double getId() {
+		return id;
+	}
+
+	public void setId(double id) {
+		System.out.println("Setter id :");
+		this.id = id;
+	}
+
+	public Employee() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + "]";
+	}
+	
+	public void init() {
+		System.out.println("Inside init method");
+	}
+	
+	public void destroy() {
+		System.out.println("Inside destroy method");
+	}
+
+}
+
+
+
+config.xml
+-----------
+// we have used init-method and destroy-method
+----------------------------------------------
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+ 	<bean class="com.springcore.lifecycle.Employee" name="employee" init-method="init" destroy-method="destroy">
+ 		<property name="id" value="10"/>
+ 		
+ 	</bean>
+ 	
+ 	
+</beans>
+
+
+
+Test.java
+-----------
+
+package com.springcore.lifecycle;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test {
+
+	public static void main(String[] args) {
+//		ApplicationContext context = new ClassPathXmlApplicationContext("com/springcore/lifecycle/config.xml");
+//		Employee e =(Employee)context.getBean("employee");
+//		System.out.println(e);
+		
+		AbstractApplicationContext context = new ClassPathXmlApplicationContext("com/springcore/lifecycle/config.xml");
+		Employee e = (Employee) context.getBean("employee");
+		System.out.println(e);
+		context.registerShutdownHook();
+	}
+
+}
+
